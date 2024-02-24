@@ -1,8 +1,6 @@
 export {
-  type ChatCompletionRequestMessage,
-  Configuration,
-  OpenAIApi,
-} from "npm:openai@3.2.1";
+  OpenAI,
+} from "npm:openai@4.26.0";
 
 //@deno-types="npm:@types/node-telegram-bot-api@0.61.0"
 export {

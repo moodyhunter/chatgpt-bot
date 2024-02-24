@@ -1,11 +1,11 @@
-import { Configuration, OpenAIApi, Redis } from "../deps.ts";
+import { OpenAI, Redis } from "../deps.ts";
 import * as Bot from "./bot.ts";
 import * as Logging from "./logging.ts";
 
 export interface AppState {
   whitelist: number[];
   model: string;
-  openai: OpenAIApi;
+  openai: OpenAI;
   redis: Redis;
 }
 
@@ -21,20 +21,12 @@ function envGetOrAbort(key: string): string {
 }
 
 function envGetOpenAIModel(): string {
-  const model = Deno.env.get("OPENAI_MODEL") || "gpt-3.5-turbo";
-  if (!["gpt-3.5-turbo", "text-davinci-003"].includes(model)) {
-    console.error(`Invalid model selection "${model}"`);
-    Deno.exit(1);
-  }
-
+  const model = Deno.env.get("OPENAI_MODEL") || "gpt-4-turbo-preview";
+  console.log(model);
   return model;
 }
 
 export async function run() {
-  const config = new Configuration({
-    apiKey: envGetOrAbort("OPENAI_API_TOKEN"),
-  });
-
   const whitelist = envGetOrAbort("WHITELIST_CHAT_IDS").split(",").map((elem) =>
     parseInt(elem)
   );
@@ -44,7 +36,7 @@ export async function run() {
   Logging.info(`Connected to ${redis_url}`);
 
   const state: AppState = {
-    openai: new OpenAIApi(config),
+    openai: new OpenAI(),
     whitelist: whitelist,
     model: envGetOpenAIModel(),
     redis: redisClient,
