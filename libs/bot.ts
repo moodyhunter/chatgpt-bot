@@ -221,7 +221,7 @@ export async function dispatch(bot_token: string, state: AppState) {
 
 
             const message = usermsg.text;
-            if (message.startsWith("''") || message.startsWith("‘‘")) {
+            if (message.startsWith("''") || message.startsWith("//")) {
                 return;
             }
 
